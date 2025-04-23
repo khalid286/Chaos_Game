@@ -86,7 +86,7 @@ int main()
 
 						points.push_back(clickPos);
 						gameStarted = true;
-
+						showText2 = false;
 						///push back to points vector
 					}
 					
@@ -147,7 +147,7 @@ int main()
 			window.draw(text);
 		}
 
-		else if (vertices.size() == 3)
+		else if (showText2 && vertices.size() == 3)
 		{
 			window.draw(text2);
 		}
@@ -162,8 +162,9 @@ int main()
 			window.draw(circ);
 		}
 		
-		showText2 = false;
 		///TODO:  Draw points
+
+
 		for (int i =1; i < points.size(); i++)
 		{
 
