@@ -5,7 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include <time.h>
+#include <ctime>
 
 //Make the code easier to type with "using namespace"
 using namespace sf;
