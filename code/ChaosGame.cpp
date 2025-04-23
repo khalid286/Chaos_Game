@@ -32,10 +32,18 @@ int main()
 	text.setCharacterSize(55);
 	text.setFillColor(sf::Color::White);
 
+	sf::Text text2;
+	text2.setFont(font);
+	text2.setString("Click on the fourth point to start drawing");
+	text2.setCharacterSize(55);
+	text2.setFillColor(sf::Color::White);
+
+
 	vector<Vector2f> vertices;
 	vector<Vector2f> points;
 	bool gameStarted = false;
 	bool showText = true; // New flag to control text visibility
+	bool showText2 = true; // New flag to control text2 visibility
 
 	while (window.isOpen())
 	{
@@ -68,13 +76,18 @@ int main()
 						vertices.push_back(clickPos);
 						showText = false; // Hide the text after the first click
 					}
+
+
 					else if (points.empty())
 					{
 						///fourth click
+
 						points.push_back(clickPos);
 						gameStarted = true;
+
 						///push back to points vector
 					}
+					
 				}
 			}
 		}
@@ -126,11 +139,18 @@ int main()
 
 		window.clear();
 
+		
 		if (showText)
 		{
 			window.draw(text);
 		}
 
+		else if (vertices.size() == 3)
+		{
+			window.draw(text2);
+		}
+
+		
 		for (int i = 0; i < vertices.size(); i++)
 		{
 			CircleShape circ(5, 30);
@@ -139,10 +159,12 @@ int main()
 			circ.setFillColor(Color::White);
 			window.draw(circ);
 		}
-
+		
+		showText2 = false;
 		///TODO:  Draw points
 		for (int i =1; i < points.size(); i++)
 		{
+
 			CircleShape circ(2, 30);
 			circ.setOrigin(2, 2);
 			circ.setPosition(Vector2f(points[i].x, points[i].y));
