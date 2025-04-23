@@ -1,3 +1,5 @@
+//Mohammad Khalid Daneshwar & Michael Sundukos
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
@@ -14,7 +16,7 @@ int main()
 	// Create a video mode object
 	VideoMode vm(1920, 1080);
 	// Create and open a window for the game
-	RenderWindow window(vm, "Chaos Game!!", Style::Default);
+	RenderWindow window(vm, "Chaos Game!", Style::Default);
 
 	// Seed the random number generator once
 	srand(static_cast<unsigned>(time(0)));
