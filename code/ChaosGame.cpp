@@ -81,6 +81,8 @@ int main()
 					{
 						vertices.push_back(clickPos);
 						showText = false; // Hide the text after the first click
+						for (int i = 0; i < vertices.size(); i++)
+							{
 						if (vertices.at(i).x > x_axis)
 						{
 							if (i != 2)
@@ -109,6 +111,7 @@ int main()
 						}
 				
 					}
+				}
 				}
 
 
