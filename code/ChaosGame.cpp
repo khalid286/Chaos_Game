@@ -43,6 +43,10 @@ int main()
 
 	vector<Vector2f> vertices;
 	vector<Vector2f> points;
+	int x_axis = vm.width / 2;
+	int distance = 0;
+	vector<Vector2f> mirroredVertices;
+	vector<Vector2f> mirroredPoints;
 	bool gameStarted = false;
 	bool showText = true; // New flag to control text visibility
 	bool showText2 = true; // New flag to control text2 visibility
@@ -77,7 +81,35 @@ int main()
 					{
 						vertices.push_back(clickPos);
 						showText = false; // Hide the text after the first click
+						if (vertices.at(i).x > x_axis)
+						{
+							if (i != 2)
+							{
+								distance = vertices.at(i).x - x_axis;
+								mirroredVertices.push_back(Vector2f(x_axis - distance, vertices.at(i).y));
+							}
+							else
+							{
+								distance = vertices.at(i).x - x_axis;
+								mirroredVertices.push_back(Vector2f(x_axis - distance, vertices.at(i).y));
+							}
+						}
+						else if (vertices.at(i).x < x_axis)
+						{
+							if (i != 2)
+							{
+								distance = x_axis - vertices.at(i).x;
+								mirroredVertices.push_back(Vector2f(x_axis + distance, vertices.at(i).y));
+							}
+							else
+							{
+								distance = x_axis - vertices.at(i).x;
+								mirroredVertices.push_back(Vector2f(x_axis + distance, vertices.at(i).y));
+							}
+						}
+				
 					}
+				}
 
 
 					else if (points.empty())
@@ -87,6 +119,20 @@ int main()
 						points.push_back(clickPos);
 						gameStarted = true;
 						showText2 = false;
+						for (int i = 0; i < points.size(); i++)
+						{
+							if (points.at(i).x > x_axis)
+							{
+								distance = points.at(i).x - x_axis;
+								mirroredPoints.push_back(Vector2f(distance, points.at(i).y));
+							}
+							else if (points.at(i).x < x_axis)
+							{
+								distance = x_axis - points.at(i).x;
+								mirroredPoints.push_back(Vector2f(x_axis + distance , points.at(i).y));
+							}
+
+						}
 						///push back to points vector
 					}
 					
@@ -132,6 +178,21 @@ int main()
 				}
 			}
 		}
+			if (mirroredPoints.size() > 0)
+		{
+			int FR = 100;
+			for (int i = 0; i < FR; i++)
+			{
+				int t = rand() % mirroredVertices.size();
+
+				Vector2f randVertex = mirroredVertices[t];
+				Vector2f lastPoint = mirroredPoints.back();
+
+				Vector2f MP((randVertex.x + lastPoint.x) / 2, (randVertex.y + lastPoint.y) / 2);
+				mirroredPoints.push_back(MP);
+
+			}
+		}
 
 		/*
 		****************************************
@@ -161,6 +222,17 @@ int main()
 			circ.setFillColor(Color::White);
 			window.draw(circ);
 		}
+			
+		for (int i = 0; i < mirroredVertices.size(); i++)
+		{
+			CircleShape circ(5, 30);
+			circ.setPosition(Vector2f(mirroredVertices[i].x, mirroredVertices[i].y));
+			circ.setFillColor(Color::Red);
+			window.draw(circ);
+
+		}
+		
+	
 		
 		///TODO:  Draw points
 
@@ -174,6 +246,16 @@ int main()
 			circ.setFillColor(Color::White);
 			window.draw(circ);
 		}
+
+		for (int i = 0; i < mirroredPoints.size(); i++)
+		{
+			CircleShape circ(5, 30);
+			circ.setPosition(Vector2f(mirroredPoints[i].x, mirroredPoints[i].y));
+			circ.setFillColor(Color::Red);
+			window.draw(circ);
+
+		}
+		
 
 		window.display();
 	}
