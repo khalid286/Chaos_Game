@@ -1,6 +1,5 @@
 //Michael Sundukos & Mohammad Khalid Daneshwar
 // Include important C++ libraries here
-
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
@@ -29,7 +28,7 @@ int main()
     // Create the text object once
     sf::Text text;
     text.setFont(font);
-    text.setString("Please click on any three points on the screen!");
+    text.setString("Please click on any three points on the screen!\nAfter three click, click on a fourth point to start!");
     text.setCharacterSize(30);
     text.setFillColor(Color::White);
     text.setPosition(50, 50); // Adjust position as needed
