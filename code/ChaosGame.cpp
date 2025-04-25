@@ -119,7 +119,7 @@ int main()
 					{
 						///fourth click
 
-						points.push_back(clickPos);
+						points.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
 						gameStarted = true;
 						showText2 = false;
 						for (int i = 0; i < points.size(); i++)
@@ -262,4 +262,4 @@ int main()
 
 		window.display();
 	}
-}
+
