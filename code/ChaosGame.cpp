@@ -30,7 +30,7 @@ int main()
 	while (window.isOpen())
 	{
 		sf::Font font;
-		if (!font.loadFromFile("BrownieStencil.ttf"))
+		if (!font.loadFromFile("Font.ttf"))
 		{
 			cout << "Unable to open file" << endl;
 		}
