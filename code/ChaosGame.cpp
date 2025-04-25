@@ -1,4 +1,6 @@
+//Michael Sundukos & Mohammad Khalid Daneshwar
 // Include important C++ libraries here
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
@@ -6,213 +8,166 @@
 #include <vector>
 #include <time.h>
 
-//Make the code easier to type with "using namespace"
+// Make the code easier to type with "using namespace"
 using namespace sf;
 using namespace std;
 
 int main()
 {
-	// Create a video mode object
-	VideoMode vm(1920, 1080);
-	// Create and open a window for the game
-	RenderWindow window(vm, "Chaos Game!!", Style::Default);
-	
-	vector<Vector2f> vertices;
-	vector<Vector2f> points;
-	int x_axis = vm.width / 2;
-	int distance = 0;
-	vector<Vector2f> mirroredVertices;
-	vector<Vector2f> mirroredPoints;
-	//vector<Vector2f> inverseVertices;
-	//vector<Vector2f> inversePoints;
-	
+    // Create a video mode object
+    VideoMode vm(1920, 1080);
+    // Create and open a window for the game
+    RenderWindow window(vm, "Chaos Game!!", Style::Default);
 
-	while (window.isOpen())
-	{
-		sf::Font font;
-		if (!font.loadFromFile("Font.ttf"))
-		{
-			cout << "Unable to open file" << endl;
-		}
+    // Load font once before the game loop
+    sf::Font font;
+    if (!font.loadFromFile("Font.ttf"))
+    {
+        cout << "Unable to open file" << endl;
+    }
 
-		sf::Text text;
-		text.setFont(font);
-		text.setString("Please click on any three points on the screen!");
-		text.setCharacterSize(30);
-		text.setFillColor(Color::White);
+    // Create the text object once
+    sf::Text text;
+    text.setFont(font);
+    text.setString("Please click on any three points on the screen!");
+    text.setCharacterSize(30);
+    text.setFillColor(Color::White);
+    text.setPosition(50, 50); // Adjust position as needed
 
+    // Variables
+    vector<Vector2f> vertices;
+    vector<Vector2f> points;
+    vector<Vector2f> mirroredVertices;
+    vector<Vector2f> mirroredPoints;
 
-		Event event;
-		while (window.pollEvent(event))
-		{
-		    if (event.type == Event::Closed)
-		    {
-					// Quit the game when the window is closed
-					window.close();
-		    }
-		    if (event.type == sf::Event::MouseButtonPressed)
-		    {
-			if (event.mouseButton.button == sf::Mouse::Left)
-			{
-			    std::cout << "the left button was pressed" << std::endl;
-			    std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-			    std::cout << "mouse y: " << event.mouseButton.y << std::endl;
-				//std::cout << "Inverse x: " << event.mouseButton.y << std::endl;
-				//std::cout << "Inverse y: " << event.mouseButton.x << std::endl;
-	
-			    if(vertices.size() < 3)
-			    {
-				vertices.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
-				for (int i = 0; i < vertices.size(); i++)
-				{
-					if (vertices.at(i).x > x_axis)
-					{
-						if (i != 2)
-						{
-							distance = vertices.at(i).x - x_axis;
-							mirroredVertices.push_back(Vector2f(x_axis - distance, vertices.at(i).y));
-						}
-						else
-						{
-							distance = vertices.at(i).x - x_axis;
-							mirroredVertices.push_back(Vector2f(x_axis - distance, vertices.at(i).y));
-						}
-					}
-					else if (vertices.at(i).x < x_axis)
-					{
-						if (i != 2)
-						{
-							distance = x_axis - vertices.at(i).x;
-							mirroredVertices.push_back(Vector2f(x_axis + distance, vertices.at(i).y));
-						}
-						else
-						{
-							distance = x_axis - vertices.at(i).x;
-							mirroredVertices.push_back(Vector2f(x_axis + distance, vertices.at(i).y));
-						}
-					}
-					
-				}
-				
-				//inverseVertices.push_back(Vector2f(event.mouseButton.y, event.mouseButton.x));
-			    }
-			    else if(points.size() == 0)
-			    {
-				///fourth click
-				///push back to points vector
-					points.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
-					for (int i = 0; i < points.size(); i++)
-					{
-						if (points.at(i).x > x_axis)
-						{
-							distance = points.at(i).x - x_axis;
-							mirroredPoints.push_back(Vector2f(distance, points.at(i).y));
-						}
-						else if (points.at(i).x < x_axis)
-						{
-							distance = x_axis - points.at(i).x;
-							mirroredPoints.push_back(Vector2f(x_axis + distance , points.at(i).y));
-						}
+    int x_axis = vm.width / 2;
+    int distance = 0;
 
-					}
-					
-					//inversePoints.push_back(Vector2f(event.mouseButton.y, event.mouseButton.x));
-			    }
-			}
-		    }
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape))
-		{
-			window.close();
-		}
-		/*
-		****************************************
-		Update
-		****************************************
-		*/
-	
-		if(points.size() > 0)
-		{
-			int framerate = 100;
-			for (int i = 0; i < framerate; i++)
-			{
-				int temp = rand() % vertices.size();
+    // Game loop
+    while (window.isOpen())
+    {
+        // Handle events
+        Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == Event::Closed)
+            {
+                window.close();
+            }
 
-				Vector2f randomVertex = vertices[temp];
-				Vector2f lastPoint = points.back();
+            if (event.type == sf::Event::MouseButtonPressed)
+            {
+                if (event.mouseButton.button == sf::Mouse::Left)
+                {
+                    if (vertices.size() < 3)
+                    {
+                        Vector2f clicked(event.mouseButton.x, event.mouseButton.y);
+                        vertices.push_back(clicked);
 
-				Vector2f midpoint((randomVertex.x + lastPoint.x) / 2, (randomVertex.y + lastPoint.y) / 2);
-				points.push_back(midpoint);
-				
-			
-			}
-			///generate more point(s)
-		    ///select random vertex
-		    ///calculate midpoint between random vertex and the last point in the vector
-		    ///push back the newly generated coord.
-		}
+                        // Mirror logic
+                        if (clicked.x > x_axis)
+                            distance = clicked.x - x_axis;
+                        else
+                            distance = x_axis - clicked.x;
 
-		if (mirroredPoints.size() > 0)
-		{
-			int FR = 100;
-			for (int i = 0; i < FR; i++)
-			{
-				int t = rand() % mirroredVertices.size();
+                        float mirroredX = clicked.x > x_axis ? x_axis - distance : x_axis + distance;
+                        mirroredVertices.push_back(Vector2f(mirroredX, clicked.y));
+                    }
+                    else if (points.empty())
+                    {
+                        Vector2f clicked(event.mouseButton.x, event.mouseButton.y);
+                        points.push_back(clicked);
 
-				Vector2f randVertex = mirroredVertices[t];
-				Vector2f lastPoint = mirroredPoints.back();
+                        // Mirror logic
+                        if (clicked.x > x_axis)
+                            distance = clicked.x - x_axis;
+                        else
+                            distance = x_axis - clicked.x;
 
-				Vector2f MP((randVertex.x + lastPoint.x) / 2, (randVertex.y + lastPoint.y) / 2);
-				mirroredPoints.push_back(MP);
+                        float mirroredX = clicked.x > x_axis ? x_axis - distance : x_axis + distance;
+                        mirroredPoints.push_back(Vector2f(mirroredX, clicked.y));
+                    }
+                }
+            }
+        }
 
-			}
-		}
-		
+        if (Keyboard::isKeyPressed(Keyboard::Escape))
+        {
+            window.close();
+        }
 
-	
-		/*
-		****************************************
-		Draw
-		****************************************
-		*/
-		window.clear();
-		window.draw(text);
-		for(int i = 0; i < vertices.size(); i++)
-		{
-		    CircleShape circ(5,30);
-		    circ.setPosition(Vector2f(vertices[i].x, vertices[i].y));
-		    circ.setFillColor(Color::White);
-		    window.draw(circ);
-			
-		for (int i = 0; i < mirroredVertices.size(); i++)
-		{
-			CircleShape circ(5, 30);
-			circ.setPosition(Vector2f(mirroredVertices[i].x, mirroredVertices[i].y));
-			circ.setFillColor(Color::Red);
-			window.draw(circ);
+        // Update Points - Original
+        if (!points.empty())
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                int randIndex = rand() % vertices.size();
+                Vector2f randVertex = vertices[randIndex];
+                Vector2f lastPoint = points.back();
 
-		}
-		
+                Vector2f midpoint((randVertex.x + lastPoint.x) / 2, (randVertex.y + lastPoint.y) / 2);
+                points.push_back(midpoint);
+            }
+        }
 
-		for (int i = 0; i < points.size(); i++)
-		{
-			CircleShape circ(5, 30);
-			circ.setPosition(Vector2f(points[i].x, points[i].y));
-			circ.setFillColor(Color::White);
-			window.draw(circ);
+        // Update Points - Mirrored
+        if (!mirroredPoints.empty())
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                int randIndex = rand() % mirroredVertices.size();
+                Vector2f randVertex = mirroredVertices[randIndex];
+                Vector2f lastPoint = mirroredPoints.back();
 
-		}
-		for (int i = 0; i < mirroredPoints.size(); i++)
-		{
-			CircleShape circ(5, 30);
-			circ.setPosition(Vector2f(mirroredPoints[i].x, mirroredPoints[i].y));
-			circ.setFillColor(Color::Red);
-			window.draw(circ);
+                Vector2f midpoint((randVertex.x + lastPoint.x) / 2, (randVertex.y + lastPoint.y) / 2);
+                mirroredPoints.push_back(midpoint);
+            }
+        }
 
-		}
-		
-		///TODO:  Draw points
-		window.display();
-		}
-	}
+        // Draw
+        window.clear();
+
+        // Always show prompt at top
+        window.draw(text);
+
+        // Draw Vertices
+        for (const auto& vertex : vertices)
+        {
+            CircleShape circ(5, 30);
+            circ.setPosition(vertex);
+            circ.setFillColor(Color::White);
+            window.draw(circ);
+        }
+
+        // Draw Mirrored Vertices
+        for (const auto& vertex : mirroredVertices)
+        {
+            CircleShape circ(5, 30);
+            circ.setPosition(vertex);
+            circ.setFillColor(Color::Red);
+            window.draw(circ);
+        }
+
+        // Draw Points
+        for (const auto& point : points)
+        {
+            CircleShape circ(5, 30);
+            circ.setPosition(point);
+            circ.setFillColor(Color::White);
+            window.draw(circ);
+        }
+
+        // Draw Mirrored Points
+        for (const auto& point : mirroredPoints)
+        {
+            CircleShape circ(5, 30);
+            circ.setPosition(point);
+            circ.setFillColor(Color::Red);
+            window.draw(circ);
+        }
+
+        window.display();
+    }
+
+    return 0;
 }
