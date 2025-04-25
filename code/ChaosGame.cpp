@@ -213,5 +213,6 @@ int main()
 		
 		///TODO:  Draw points
 		window.display();
+		}
 	}
 }
