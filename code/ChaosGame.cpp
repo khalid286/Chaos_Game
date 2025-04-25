@@ -79,7 +79,7 @@ int main()
 
 					if (vertices.size() < 3)
 					{
-						vertices.push_back(clickPos);
+						vertices.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
 						showText = false; // Hide the text after the first click
 						for (int i = 0; i < vertices.size(); i++)
 							{
